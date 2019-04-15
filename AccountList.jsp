@@ -55,7 +55,7 @@ input[type=submit] {
   </tr>
 <%-- JSP CODE --%>
 <%
-String fileName = "c:\\Accounts\\accounts.csv";
+String fileName = "accounts.csv";
 String line;
 FileInputStream fis = new FileInputStream(fileName);
 DataInputStream dis = new DataInputStream(fis);
