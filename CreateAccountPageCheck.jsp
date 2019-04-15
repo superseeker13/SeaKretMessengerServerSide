@@ -108,7 +108,7 @@ input[type=submit]:hover {
         <p style="color:red;">Password does not match!</p>
         <%
         }
-        else if(csvFileReader.isUsernameTaken("c:\\Accounts\\accounts.csv", username)){
+        else if(csvFileReader.isUsernameTaken("accounts.csv", username)){
         %>
         <p style="color:red;">Username is already taken!</p>
         <%
@@ -122,7 +122,7 @@ input[type=submit]:hover {
         // Everything Checks Out
         else {
             System.out.println(username + " " + password);
-            String fileName = "c:\\Accounts\\accounts.csv";
+            String fileName = "accounts.csv";
             csvFileWriter.writeCsvFile(fileName, username, password);
             String redirect = "create_account_Response.jsp";
             response.sendRedirect(redirect);
