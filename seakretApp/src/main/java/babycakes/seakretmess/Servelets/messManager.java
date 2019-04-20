@@ -32,7 +32,7 @@ public class messManager extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        File file = new File(request.getHeader(userName) +".gif");
+        File file = new File("Users/" + request.getHeader(userName) +"/message.gif");
         if (file.exists()) {
             response.setStatus(200); //arg0.sendResponseHeaders(200, file.length());
             try (OutputStream outputStream = response.getOutputStream()) {
@@ -72,7 +72,7 @@ public class messManager extends HttpServlet {
         message = buff.toString();
         userName = request.getHeader("Username");
         destination = request.getHeader("Destination");
-
+        TextConverter tc = new TextConverter("jpeg");
         //Check if anything was properly read out of the request
         if (message == null) {
             response.setStatus(403);
@@ -81,6 +81,7 @@ public class messManager extends HttpServlet {
         }
         try {
             //Attemp to write out the username and message sent in the request
+            tc.toImage(message, userName);
             out.write("User " + userName + " sent the message, \""
                     + message + "\", to " + destination + ".");
             response.setStatus(200);
