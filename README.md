@@ -1,2 +1,2 @@
 # SeaKretMessengerServerSide
-Servlet
+Sekret messager web app
