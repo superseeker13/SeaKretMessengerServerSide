@@ -32,7 +32,7 @@ public class messManager extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        File file = new File("Users/" + request.getHeader(userName) +"/message.gif");
+        File file = new File("Users/" + request.getHeader("userName") +"/message.gif");
         if (file.exists()) {
             response.setStatus(200); //arg0.sendResponseHeaders(200, file.length());
             try (OutputStream outputStream = response.getOutputStream()) {
