@@ -86,7 +86,7 @@ public class messManager extends HttpServlet {
                     + message + "\", to " + destination + ".");
             response.setStatus(200);
             out.print("\nSuccess");
-        } catch (Exception e) {
+        } catch (IOException e) {
             response.setStatus(500);
             out.print("E" + e.getMessage());
         }
