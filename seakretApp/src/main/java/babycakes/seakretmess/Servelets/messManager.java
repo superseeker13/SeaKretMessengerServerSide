@@ -57,7 +57,6 @@ public class messManager extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // TODO Auto-generated method stub
-
         PrintWriter out = response.getWriter();
         response.setContentType("text/plain");
 

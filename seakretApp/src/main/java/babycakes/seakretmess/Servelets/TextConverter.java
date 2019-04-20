@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.*;
 import java.io.File;
 import java.io.IOException;
+
 //convert text from string to bitmap
 public class TextConverter {
 //should be bmp, jpeg, or png
@@ -45,7 +46,7 @@ public class TextConverter {
 
     public void toImage(String message, String saveLocation) throws IOException {
         File directory = new File("Users/" + saveLocation);
-        if (! directory.exists()){
+        if (!directory.exists()){
             directory.mkdir();
             // If you require it to make the entire directory path including parents,
             // use directory.mkdirs(); here instead.
