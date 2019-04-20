@@ -14,9 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 public class messManager extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private String userName;
-    private String message;
-    private String destination;
 
     public messManager() {
         super();
@@ -68,16 +65,24 @@ public class messManager extends HttpServlet {
             buff.append(line);
         }
 
-        message = buff.toString();
-        userName = request.getHeader("Username");
-        destination = request.getHeader("Destination");
+        final String message = buff.toString();
+        final String userName = request.getHeader("Username");
+        final String destination = request.getHeader("Destination");
         TextConverter tc = new TextConverter("jpeg");
         //Check if anything was properly read out of the request
-        if (message == null) {
+        if (tc == null) {
+            response.setStatus(505);
+            out.print("Error: " + new NullPointerException().toString());
+            return;
+        }
+
+        //Check if anything was properly read out of the request
+        if (message == null || userName == null) {
             response.setStatus(403);
             out.print("Error");
             return;
         }
+        
         try {
             //Attemp to write out the username and message sent in the request
             tc.toImage(message, userName);
