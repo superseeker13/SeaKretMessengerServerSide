@@ -9,21 +9,21 @@ import java.awt.image.BufferedImage;
 import javax.imageio.*;
 import java.io.File;
 import java.io.IOException;
+
 //convert text from string to bitmap
-public class TextConverter {
+public class textAsBitmap {
 //should be bmp, jpeg, or png
     private final String fileType;
     public final int WHITE = 16777215;
     public final int BLUE = 255;
     private final int BLACK = 0;
-
-    public TextConverter(String type){
+    public textAsBitmap(String type){
         fileType = type;
     }
 
     private void drawBox(BufferedImage img, int h, int w, int offsetX, int offsetY){
 
-        int color = WHITE; // RGBA value, each component in a byte
+        int color = BLUE; // RGBA value, each component in a byte
         //Iterates through pixels, setting color based on x,y coords
         //Start at the offset, got until you have drawn 10 a line 10 percent of the overall width
 
@@ -43,15 +43,8 @@ public class TextConverter {
         }//end for
     }//end drawbox
 
-    public void toImage(String message, String saveLocation) throws IOException {
-        File directory = new File("Users/" + saveLocation);
-        if (! directory.exists()){
-            directory.mkdir();
-            // If you require it to make the entire directory path including parents,
-            // use directory.mkdirs(); here instead.
-        }
-
-
+    public void convertToImage(String message) throws IOException {
+        
         //String to convert
         String convertString = message;
 
@@ -59,7 +52,7 @@ public class TextConverter {
         String fileName = "baseImage";
 
         //create a File Object
-        File newFile = new File("Users/" + saveLocation + "/" + fileName + "." + fileType);
+        File newFile = new File(fileName + "." + fileType);
 
         //create the font you wish to use
         Font font = new Font("TimesNewRoman", Font.PLAIN, 48);
@@ -89,18 +82,19 @@ public class TextConverter {
 
         //releasing resources
         g.dispose();
+
         //creating the file
         try{
         ImageIO.write(image, fileType, newFile);
         System.out.println("Complete:" + newFile);
         }
         catch(IOException e){
-        System.out.println("You done goofed: " + "redrawn");
+        System.out.println("Shits broke yo" + newFile);
         }
 
         //Make draw calls in a loop, adjust offset by index of loop counter as a fraction multiplier
         for(int j = 0; j < 5; j++){
-            BufferedImage img = ImageIO.read(new File("Users/" + saveLocation + "/baseImage." + fileType));
+            BufferedImage img = ImageIO.read(new File("baseImage." + fileType));
             //every iteration skip 3 increments vertically
             for(int y = 0; y + (h/30) <= h; y += 3*(h/30)){
                 //every iteration skip 5 increments horizontally
@@ -108,37 +102,14 @@ public class TextConverter {
                     drawBox(img, h, w, x, y);
                 }
             }
-
             try{
-                ImageIO.write(img, "jpeg", new File("Users/" + saveLocation + "/redrawn" + j + "." + fileType));
+                ImageIO.write(img, "jpeg", new File("redrawn" + j + "." + fileType));
                 System.out.println("Complete:" + "redrawn" + j + "." + fileType);
             }
             catch(IOException e){
-                System.out.println("You done goofed: " + "redrawn" + j + "." + fileType);
+                System.out.println("Shits broke yo" + "redrawn" + j + "." + fileType);
             }
-        }
-        
-        String[] args = new String[]{"python","makeGif.py", "Users/" + saveLocation};
-
-        Runtime app = Runtime.getRuntime();
-        Process prg = app.exec(args);
-    }
-
-    public void scrubFiles(String username){
-        String path = "Users/" + username;
-        File dir = new File(path);
-		
-		if(dir.isDirectory() == false) {
-			System.out.println("Not a directory. Do nothing");
-			return;
-		}
-		File[] listFiles = dir.listFiles();
-		for(File file : listFiles){
-			System.out.println("Deleting "+file.getName());
-			file.delete();
-		}
-		//now directory is empty, so we can delete it
-		System.out.println("Deleting Directory. Success = "+dir.delete());
+        }    
     }
 }//end class
 /*
