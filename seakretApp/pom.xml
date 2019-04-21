@@ -19,6 +19,12 @@
             <groupId>com.sun.xml.stream</groupId>
             <artifactId>sjsxp</artifactId>
             <version>1.0.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.xml.stream</groupId>
+                    <artifactId>stax-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.github.jai-imageio</groupId>

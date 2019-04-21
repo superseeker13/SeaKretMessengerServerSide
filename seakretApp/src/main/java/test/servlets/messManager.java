@@ -33,10 +33,10 @@ public class messManager extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        File file = new File("../Users/" + request.getHeader("Username") +"/message.gif");
+        File file = new File("../Users/" + request.getHeader("Username") + "/message.gif");
         if (file.exists()) {
             response.setStatus(200); //arg0.sendResponseHeaders(200, file.length());
-            try (OutputStream outputStream = response.getOutputStream()) {
+            try ( OutputStream outputStream = response.getOutputStream()) {
                 Files.copy(file.toPath(), outputStream);
                 outputStream.close();
             }
@@ -83,16 +83,16 @@ public class messManager extends HttpServlet {
         }
         try {
             //Attempt to write out the Username and message sent in the request
-        	try {
-        		tc.toImage(message, destination);
-        	}catch(Throwable c) {
-        		StackTraceElement[] stk = c.getStackTrace();
-        		for(int i = 0; i < stk.length; i++) {
-        			out.write("\n" + stk[i]);
-        		}
-        		out.write("\n Image failed");
-        	}
-        		out.write("User " + userName + " sent the message, \""
+            try {
+                tc.toImage(message, destination);
+            } catch (IOException c) {
+                StackTraceElement[] stk = c.getStackTrace();
+                for (StackTraceElement stk1 : stk) {
+                    out.write("\n" + stk1);
+                }
+                out.write("\n Image failed");
+            }
+            out.write("User " + userName + " sent the message, \""
                     + message + "\", to " + destination + ".");
             response.setStatus(200);
             out.print("\nSuccess");

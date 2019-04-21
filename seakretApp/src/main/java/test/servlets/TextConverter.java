@@ -8,7 +8,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import javax.imageio.stream.FileImageOutputStream;
 //convert text from string to bitmap
 public class TextConverter {
 //should be bmp, jpeg, or png
@@ -59,8 +61,9 @@ public class TextConverter {
         String fileName = "baseImage";
 
         //create a File Object
-        File newFile = new File("/opt/bitnami/apache-tomcat/logs/Users/"    + saveLocation + "/" + fileName + "." + fileType);
-
+        File newFile = new File("/opt/bitnami/apache-tomcat/logs/Users/" 
+                + saveLocation + "/" + fileName + "." + fileType);
+        FileImageOutputStream fileOut = new FileImageOutputStream(newFile);
         //create the font you wish to use
         Font font = new Font("TimesNewRoman", Font.PLAIN, 48);
 
@@ -91,7 +94,7 @@ public class TextConverter {
         g.dispose();
         //creating the file
         try{
-        	ImageIO.write(image, fileType, newFile);
+        	ImageIO.write(image, fileType, fileOut);
         	System.out.println("Complete:" + newFile);
         }
         catch(IOException e){
@@ -100,7 +103,8 @@ public class TextConverter {
 
         //Make draw calls in a loop, adjust offset by index of loop counter as a fraction multiplier
         for(int j = 0; j < 5; j++){
-            BufferedImage img = ImageIO.read(new File("/opt/bitnami/apache-tomcat/logs/Users/" + saveLocation + "/baseImage." + fileType));
+            BufferedImage img = ImageIO.read(new File("/opt/bitnami/apache-tomcat/logs/Users/" 
+                    + saveLocation + "/baseImage." + fileType));
             //every iteration skip 3 increments vertically
             for(int y = 0; y + (h/30) <= h; y += 3*(h/30)){
                 //every iteration skip 5 increments horizontally
@@ -110,7 +114,9 @@ public class TextConverter {
             }
 
             try{
-                ImageIO.write(img, "jpeg", new File("/opt/bitnami/apache-tomcat/logs/Users/" + saveLocation + "/redrawn" + j + "." + fileType));
+                File logginFile = new File("/opt/bitnami/apache-tomcat/logs/Users/" 
+                        + saveLocation + "/redrawn" + j + "." + fileType);
+                ImageIO.write(img, "jpeg", new FileImageOutputStream(logginFile));
                 System.out.println("Complete:" + "redrawn" + j + "." + fileType);
             }
             catch(IOException e){
