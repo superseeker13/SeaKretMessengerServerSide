@@ -1,6 +1,7 @@
-package babycakes.seakretmess.Servelets;
+package test.servlets;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.nio.file.Files;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 public class messManager extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private String userName;
+    private String message;
+    private String destination;
 
     public messManager() {
         super();
@@ -29,7 +33,7 @@ public class messManager extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        File file = new File("Users/" + request.getHeader("userName") +"/message.gif");
+        File file = new File("../Users/" + request.getHeader("Username") +"/message.gif");
         if (file.exists()) {
             response.setStatus(200); //arg0.sendResponseHeaders(200, file.length());
             try (OutputStream outputStream = response.getOutputStream()) {
@@ -54,6 +58,7 @@ public class messManager extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // TODO Auto-generated method stub
+
         PrintWriter out = response.getWriter();
         response.setContentType("text/plain");
 
@@ -65,34 +70,36 @@ public class messManager extends HttpServlet {
             buff.append(line);
         }
 
-        final String message = buff.toString();
-        final String userName = request.getHeader("Username");
-        final String destination = request.getHeader("Destination");
+        message = buff.toString();
+        userName = request.getHeader("Username");
+        destination = request.getHeader("Destination");
         TextConverter tc = new TextConverter("jpeg");
         //Check if anything was properly read out of the request
-        if (tc == null) {
-            response.setStatus(505);
-            out.print("Error: " + new NullPointerException().toString());
-            return;
-        }
-
-        //Check if anything was properly read out of the request
-        if (message == null || userName == null) {
+        out.write(Paths.get("").toAbsolutePath().toString() + "\n");
+        if (message == null) {
             response.setStatus(403);
             out.print("Error");
             return;
         }
-        
         try {
-            //Attemp to write out the username and message sent in the request
-            tc.toImage(message, userName);
-            out.write("User " + userName + " sent the message, \""
+            //Attempt to write out the Username and message sent in the request
+        	try {
+        		tc.toImage(message, destination);
+        	}catch(Throwable c) {
+        		StackTraceElement[] stk = c.getStackTrace();
+        		for(int i = 0; i < stk.length; i++) {
+        			out.write("\n" + stk[i]);
+        		}
+        		out.write("\n Image failed");
+        	}
+        		out.write("User " + userName + " sent the message, \""
                     + message + "\", to " + destination + ".");
             response.setStatus(200);
             out.print("\nSuccess");
-        } catch (IOException e) {
+        } catch (Exception e) {
             response.setStatus(500);
-            out.print("E" + e.getMessage());
+            out.print("Error: " + e.getMessage());
+            out.write("\nWe are here.");
         }
     }
 }

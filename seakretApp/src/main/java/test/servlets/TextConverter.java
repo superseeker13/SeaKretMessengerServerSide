@@ -1,4 +1,4 @@
-package babycakes.seakretmess.Servelets;
+package test.servlets;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import javax.imageio.*;
 import java.io.File;
 import java.io.IOException;
-
 //convert text from string to bitmap
 public class TextConverter {
 //should be bmp, jpeg, or png
@@ -45,13 +44,13 @@ public class TextConverter {
     }//end drawbox
 
     public void toImage(String message, String saveLocation) throws IOException {
-        File directory = new File("Users/" + saveLocation);
-        if (!directory.exists()){
+        File directory = new File("/opt/bitnami/apache-tomcat/logs/Users/"  + saveLocation);
+        if (! directory.exists()){
             directory.mkdir();
+            System.out.println("Anything?\n");
             // If you require it to make the entire directory path including parents,
             // use directory.mkdirs(); here instead.
         }
-
 
         //String to convert
         String convertString = message;
@@ -60,7 +59,7 @@ public class TextConverter {
         String fileName = "baseImage";
 
         //create a File Object
-        File newFile = new File("Users/" + saveLocation + "/" + fileName + "." + fileType);
+        File newFile = new File("/opt/bitnami/apache-tomcat/logs/Users/"    + saveLocation + "/" + fileName + "." + fileType);
 
         //create the font you wish to use
         Font font = new Font("TimesNewRoman", Font.PLAIN, 48);
@@ -92,16 +91,16 @@ public class TextConverter {
         g.dispose();
         //creating the file
         try{
-        ImageIO.write(image, fileType, newFile);
-        System.out.println("Complete:" + newFile);
+        	ImageIO.write(image, fileType, newFile);
+        	System.out.println("Complete:" + newFile);
         }
         catch(IOException e){
-        System.out.println("You done goofed: " + "redrawn");
+        	System.out.println("You done goofed: " + "redrawn");
         }
 
         //Make draw calls in a loop, adjust offset by index of loop counter as a fraction multiplier
         for(int j = 0; j < 5; j++){
-            BufferedImage img = ImageIO.read(new File("Users/" + saveLocation + "/baseImage." + fileType));
+            BufferedImage img = ImageIO.read(new File("/opt/bitnami/apache-tomcat/logs/Users/" + saveLocation + "/baseImage." + fileType));
             //every iteration skip 3 increments vertically
             for(int y = 0; y + (h/30) <= h; y += 3*(h/30)){
                 //every iteration skip 5 increments horizontally
@@ -111,7 +110,7 @@ public class TextConverter {
             }
 
             try{
-                ImageIO.write(img, "jpeg", new File("Users/" + saveLocation + "/redrawn" + j + "." + fileType));
+                ImageIO.write(img, "jpeg", new File("/opt/bitnami/apache-tomcat/logs/Users/" + saveLocation + "/redrawn" + j + "." + fileType));
                 System.out.println("Complete:" + "redrawn" + j + "." + fileType);
             }
             catch(IOException e){
@@ -119,14 +118,14 @@ public class TextConverter {
             }
         }
         
-        String[] args = new String[]{"python","makeGif.py", "Users/" + saveLocation};
+        String[] args = new String[]{"python","makeGif.py", "/opt/bitnami/apache-tomcat/logs/Users/" + saveLocation};
 
         Runtime app = Runtime.getRuntime();
         Process prg = app.exec(args);
     }
 
     public void scrubFiles(String username){
-        String path = "Users/" + username;
+        String path = "/opt/bitnami/apache-tomcat/logs/Users/" + username;
         File dir = new File(path);
 		
 		if(dir.isDirectory() == false) {
